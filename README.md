@@ -1,37 +1,57 @@
 # Vulnora AI 🛡️
 
-AI-assisted, beginner-friendly website security posture checker. The first release performs passive checks on a public landing page: HTTPS, common security headers, and visible cookie flags. It does not exploit, brute-force, crawl, or modify websites.
+**An AI-assisted, defensive website security baseline checker.** Built to help website owners understand common security configuration gaps in plain language.
 
-## Safety
-Only scan websites you own or have explicit permission to assess. The app requires an authorization confirmation. It blocks local/private/reserved IP targets and validates redirect destinations. Findings are recommendations, not proof of exploitability.
+[![Tests](https://github.com/MayankNex/Vulnora-AI/actions/workflows/tests.yml/badge.svg)](https://github.com/MayankNex/Vulnora-AI/actions/workflows/tests.yml)
 
-## Setup
+## What it does
+
+- Checks HTTPS and common security response headers.
+- Reviews basic cookie flags visible on the landing-page response.
+- Prioritizes findings with a transparent heuristic score.
+- Shows manual configuration examples for Nginx, Apache, Cloudflare, and WordPress.
+- Optionally explains findings using an OpenAI API key.
+- Exports a JSON report.
+- Runs basic unit tests in GitHub Actions.
+
+## Quick start
+
+Python 3.10+:
 
 ```bash
 git clone https://github.com/MayankNex/Vulnora-AI.git
 cd Vulnora-AI
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
 # macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Optional AI explanations require your own OPENAI_API_KEY in a local .env file. Never commit secrets.
+AI explanations are optional. Copy `.env.example` to `.env`, add your own `OPENAI_API_KEY`, and restart. Never commit `.env` or share API keys.
 
-## Current scope
-- HTTPS and TLS verification
-- CSP, HSTS, nosniff, Referrer-Policy, Permissions-Policy
-- Frame protection and basic Set-Cookie flags
-- Plain-language remediation and JSON export
-- Optional AI explanations
+## Safety first
 
-This is an early-stage passive checker, not a penetration-testing tool. It does not assess application logic, APIs, authentication, or databases.
+Only scan websites you own or have explicit permission to assess. Vulnora performs a small number of passive requests to one landing page. It does not exploit vulnerabilities, brute-force, crawl, submit forms, authenticate, or change server configuration.
+
+The hostname checks are basic safeguards, **not a hardened SSRF boundary**. Do not expose this as an unrestricted public or multi-tenant scanning service. Use authentication, rate limits, network egress controls, and a security review before any hosted deployment.
+
+## Important limitations
+
+This is not a penetration-testing tool, compliance certification, or guarantee that a site is secure. Header presence does not prove a policy is correct. The score is a simple heuristic based only on observed findings. Cookie parsing is basic. Application logic, APIs, authentication, databases, and business logic are out of scope.
+
+See [Security scope and limitations](docs/SECURITY_AND_LIMITATIONS.md).
 
 ## Roadmap
-- Platform-specific guidance for WordPress, Nginx, Apache and Cloudflare
-- Owner-side configuration checks
-- Reviewable patch previews and verification
-- Scheduled monitoring with consent
 
-MIT License.
+- [x] Passive baseline checks
+- [x] Manual platform-specific fix examples
+- [x] Optional AI explanations
+- [x] JSON export and CI tests
+- [ ] Owner-authenticated configuration integrations
+- [ ] More comprehensive test coverage and report formats
+- [ ] Secure, consent-based monitoring
+
+## License
+
+MIT. See [LICENSE](LICENSE).
